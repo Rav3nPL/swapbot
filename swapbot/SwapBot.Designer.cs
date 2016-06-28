@@ -81,6 +81,7 @@
             this.tbTajny.Location = new System.Drawing.Point(81, 32);
             this.tbTajny.MaxLength = 32;
             this.tbTajny.Name = "tbTajny";
+            this.tbTajny.PasswordChar = '*';
             this.tbTajny.Size = new System.Drawing.Size(100, 20);
             this.tbTajny.TabIndex = 4;
             // 
