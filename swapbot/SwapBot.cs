@@ -118,7 +118,7 @@ namespace swapbot
             decimal ileJest = Convert.ToDecimal(json.cutoff, cult);
             tbLog.Text += nl + "Obecny cutoff: " + ileJest + nl;
             decimal ustaw = ileJest * ((100 - nudPerc.Value) / 100); //teraz to jest "ile ma być"
-            ustaw = Math.Truncate(ileJest * 1000) / 1000;//zaokrąglam do 2 miejsc.
+            ustaw = Math.Truncate(ustaw * 1000) / 1000;//zaokrąglam do 2 miejsc.
             string newRate = ustaw.ToString(cult);
 
             //swaplist currency  BTC ->id
@@ -137,7 +137,7 @@ namespace swapbot
 
             decimal diff = ileJest - Convert.ToDecimal(rate, cult);
             tbLog.Text += nl + "Obliczona różnica: " + diff + nl;
-            if (diff < 0 || diff > nudPerc.Value)//jeżeli nie zarabiamy lub różnica jest większa niż %
+            if (diff <= 0 || diff > nudPerc.Value)//jeżeli nie zarabiamy lub różnica jest większa niż %
             {
                 string stan = "";
                 if (id != "") //jak mam swapa to go zamykam
