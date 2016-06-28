@@ -1,3 +1,7 @@
+*.exe binary
+*.dll binary
+*.ico binary
+
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
