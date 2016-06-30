@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using System.Globalization;
 
 namespace swapbot
 {
@@ -20,6 +21,7 @@ namespace swapbot
         bool flag = false;
         string nl = Environment.NewLine;
         int timer = 0;
+        string konf = "konfig.txt";
 
         static string ByteToString(byte[] buff)
         {
@@ -117,8 +119,8 @@ namespace swapbot
             var json = JsonConvert.DeserializeAnonymousType(jstring, cut);
             decimal ileJest = Convert.ToDecimal(json.cutoff, cult);
             tbLog.Text += nl + "Obecny cutoff: " + ileJest + nl;
-            decimal ustaw = ileJest * ((100 - nudPerc.Value) / 100); //teraz to jest "ile ma być"
-            ustaw = Math.Truncate(ustaw * 1000) / 1000;//zaokrąglam do 2 miejsc.
+            decimal ustaw = rbProc.Checked ? ileJest * ((100 - nudPerc.Value) / 100) : ileJest - nudPerc.Value; //teraz to jest "ile ma być"
+            ustaw = Math.Truncate(ustaw * 1000) / 1000;//zaokrąglam do 3 miejsc.
             string newRate = ustaw.ToString(cult);
 
             //swaplist currency  BTC ->id
@@ -209,6 +211,46 @@ namespace swapbot
                     tbLog.Text = "Wygląda na to, że poprzednie wywyołanie się nie skończyło. Trochę za długo, nieprawda-ż?";
                 }
             }
+        }
+
+        private void SwapBot_Load(object sender, EventArgs e)
+        {
+            if (File.Exists(konf))
+            {
+                using (var sr = File.OpenText(konf))
+                {
+                    string k = sr.ReadLine(); tbJawny.Text = k;
+                    k = sr.ReadLine(); tbTajny.Text = k;
+                    k = sr.ReadLine(); nudPerc.Value = Convert.ToDecimal(k);
+                    k = sr.ReadLine(); nudTimer.Value = Convert.ToDecimal(k);
+                    k = sr.ReadLine(); rbArb.Checked = (k == "arb");
+                    k = sr.ReadLine(); cbAuto.Checked = (k == "True");
+                }
+                if (cbAuto.Checked)
+                {
+                    btGOGOGO_Click(null, null);
+                }
+            }
+        }
+
+        private void btZapisz_Click(object sender, EventArgs e)
+        {
+
+            if (File.Exists(konf))
+            {
+                File.Delete(konf);
+            }
+            using (var sw = File.CreateText(konf))
+            {
+                sw.WriteLine(tbJawny.Text);
+                sw.WriteLine(tbTajny.Text);
+                sw.WriteLine(nudPerc.Value.ToString());
+                sw.WriteLine(nudTimer.Value.ToString());
+                sw.WriteLine(rbArb.Checked ? "arb" : "proc");
+                sw.WriteLine(cbAuto.Checked.ToString());
+                sw.Close();
+            }
+            tbLog.Text = "Konfiguracja zapisana w pliku konf.txt";
         }
     }
 }

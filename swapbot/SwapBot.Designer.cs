@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SwapBot));
             this.btCheck = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tbJawny = new System.Windows.Forms.TextBox();
@@ -45,6 +46,10 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btStop = new System.Windows.Forms.Button();
             this.lblLicz = new System.Windows.Forms.Label();
+            this.btZapisz = new System.Windows.Forms.Button();
+            this.rbProc = new System.Windows.Forms.RadioButton();
+            this.rbArb = new System.Windows.Forms.RadioButton();
+            this.cbAuto = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudPerc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimer)).BeginInit();
             this.SuspendLayout();
@@ -97,7 +102,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 114);
+            this.label3.Location = new System.Drawing.Point(12, 61);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 13);
             this.label3.TabIndex = 5;
@@ -106,7 +111,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(207, 114);
+            this.label4.Location = new System.Drawing.Point(146, 61);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 13);
             this.label4.TabIndex = 6;
@@ -120,7 +125,7 @@
             0,
             0,
             65536});
-            this.nudPerc.Location = new System.Drawing.Point(81, 107);
+            this.nudPerc.Location = new System.Drawing.Point(81, 59);
             this.nudPerc.Maximum = new decimal(new int[] {
             10,
             0,
@@ -132,7 +137,7 @@
             0,
             -2147483648});
             this.nudPerc.Name = "nudPerc";
-            this.nudPerc.Size = new System.Drawing.Size(120, 20);
+            this.nudPerc.Size = new System.Drawing.Size(60, 20);
             this.nudPerc.TabIndex = 7;
             this.nudPerc.Value = new decimal(new int[] {
             5,
@@ -147,7 +152,7 @@
             0,
             0,
             0});
-            this.nudTimer.Location = new System.Drawing.Point(81, 133);
+            this.nudTimer.Location = new System.Drawing.Point(81, 104);
             this.nudTimer.Maximum = new decimal(new int[] {
             1500,
             0,
@@ -159,7 +164,7 @@
             0,
             0});
             this.nudTimer.Name = "nudTimer";
-            this.nudTimer.Size = new System.Drawing.Size(120, 20);
+            this.nudTimer.Size = new System.Drawing.Size(60, 20);
             this.nudTimer.TabIndex = 10;
             this.nudTimer.Value = new decimal(new int[] {
             90,
@@ -170,7 +175,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(207, 140);
+            this.label5.Location = new System.Drawing.Point(147, 106);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(42, 13);
             this.label5.TabIndex = 9;
@@ -179,7 +184,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 140);
+            this.label6.Location = new System.Drawing.Point(12, 106);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(71, 13);
             this.label6.TabIndex = 8;
@@ -224,17 +229,63 @@
             // lblLicz
             // 
             this.lblLicz.AutoSize = true;
-            this.lblLicz.Location = new System.Drawing.Point(146, 169);
+            this.lblLicz.Location = new System.Drawing.Point(146, 164);
             this.lblLicz.Name = "lblLicz";
             this.lblLicz.Size = new System.Drawing.Size(36, 13);
             this.lblLicz.TabIndex = 14;
             this.lblLicz.Text = "licznik";
+            // 
+            // btZapisz
+            // 
+            this.btZapisz.Location = new System.Drawing.Point(12, 130);
+            this.btZapisz.Name = "btZapisz";
+            this.btZapisz.Size = new System.Drawing.Size(102, 23);
+            this.btZapisz.TabIndex = 15;
+            this.btZapisz.Text = "Zapisz konfig";
+            this.btZapisz.UseVisualStyleBackColor = true;
+            this.btZapisz.Click += new System.EventHandler(this.btZapisz_Click);
+            // 
+            // rbProc
+            // 
+            this.rbProc.AutoSize = true;
+            this.rbProc.Checked = true;
+            this.rbProc.Location = new System.Drawing.Point(245, 59);
+            this.rbProc.Name = "rbProc";
+            this.rbProc.Size = new System.Drawing.Size(81, 17);
+            this.rbProc.TabIndex = 16;
+            this.rbProc.TabStop = true;
+            this.rbProc.Text = "procentowo";
+            this.rbProc.UseVisualStyleBackColor = true;
+            // 
+            // rbArb
+            // 
+            this.rbArb.AutoSize = true;
+            this.rbArb.Location = new System.Drawing.Point(245, 82);
+            this.rbArb.Name = "rbArb";
+            this.rbArb.Size = new System.Drawing.Size(70, 17);
+            this.rbArb.TabIndex = 17;
+            this.rbArb.Text = "arbitralnie";
+            this.rbArb.UseVisualStyleBackColor = true;
+            // 
+            // cbAuto
+            // 
+            this.cbAuto.AutoSize = true;
+            this.cbAuto.Location = new System.Drawing.Point(120, 134);
+            this.cbAuto.Name = "cbAuto";
+            this.cbAuto.Size = new System.Drawing.Size(67, 17);
+            this.cbAuto.TabIndex = 18;
+            this.cbAuto.Text = "autostart";
+            this.cbAuto.UseVisualStyleBackColor = true;
             // 
             // SwapBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(359, 408);
+            this.Controls.Add(this.cbAuto);
+            this.Controls.Add(this.rbArb);
+            this.Controls.Add(this.rbProc);
+            this.Controls.Add(this.btZapisz);
             this.Controls.Add(this.lblLicz);
             this.Controls.Add(this.btStop);
             this.Controls.Add(this.tbLog);
@@ -250,8 +301,10 @@
             this.Controls.Add(this.tbJawny);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btCheck);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SwapBot";
             this.Text = "Bitmarket SwapBot by rav3n_pl";
+            this.Load += new System.EventHandler(this.SwapBot_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudPerc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimer)).EndInit();
             this.ResumeLayout(false);
@@ -277,6 +330,10 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button btStop;
         private System.Windows.Forms.Label lblLicz;
+        private System.Windows.Forms.Button btZapisz;
+        private System.Windows.Forms.RadioButton rbProc;
+        private System.Windows.Forms.RadioButton rbArb;
+        private System.Windows.Forms.CheckBox cbAuto;
     }
 }
 
