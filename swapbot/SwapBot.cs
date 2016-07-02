@@ -18,10 +18,11 @@ namespace swapbot
             InitializeComponent();
         }
 
-        bool flag = false;
-        string nl = Environment.NewLine;
-        int timer = 0;
-        string konf = "konfig.txt";
+        bool flag = false; //blokowanie wykonania tickera podczas jego pracy
+        string nl = Environment.NewLine; //nowa linia
+        int timer = 0; //licznik czasu
+        string konf = "konfig.txt"; // plik konfiguracji
+        bool error = false; //jeżeli wystapi wyjątek w transmisji przerywamy
 
         static string ByteToString(byte[] buff)
         {
@@ -77,6 +78,7 @@ namespace swapbot
             catch (Exception e)
             {
                 tbLog.Text += nl + "Błąd transmisji! " + nl + e.Message.ToString() + nl;
+                error = true;
             }
             tbLog.Text += nl + metoda + nl + resp;//responsy po kolei do okienka
             return resp;
@@ -101,6 +103,7 @@ namespace swapbot
 
         void ticker()
         {
+            error = false;
             tbLog.Text = "";//czyścimy loga
             string jstring = "";
             CultureInfo cult = new CultureInfo("en-US");
@@ -114,7 +117,10 @@ namespace swapbot
             catch (Exception e)
             {
                 tbLog.Text += nl + "Błąd pobierania danych!" + nl + e.Message.ToString() + nl;
+                error = true;
             }
+            if (error) return; //kończymy jak błąd
+
             var cut = new { cutoff = "" };
             var json = JsonConvert.DeserializeAnonymousType(jstring, cut);
             decimal ileJest = Convert.ToDecimal(json.cutoff, cult);
@@ -127,7 +133,7 @@ namespace swapbot
             NameValueCollection par = new NameValueCollection();
             par.Add("currency", "BTC");
             string resp = postuj("swapList", par);
-
+            if (error) return; //kończymy jak błąd
             dynamic jresp = JsonConvert.DeserializeObject(resp);
             string id = "";
             string rate = "0";
@@ -149,6 +155,7 @@ namespace swapbot
                     par.Add("id", id);
                     par.Add("currency", "BTC");
                     resp = postuj("swapClose", par); //zamknij swapa
+                    if (error) return; //kończymy jak błąd
                     jresp = JsonConvert.DeserializeObject(resp);
                     stan = jresp.data.balances.available.BTC;//ile masz BTC
                 }
@@ -156,6 +163,7 @@ namespace swapbot
                 {
                     par.Clear();
                     resp = postuj("info", null);
+                    if (error) return; //kończymy jak błąd
                     jresp = JsonConvert.DeserializeObject(resp);
                     stan = jresp.data.balances.available.BTC;
                 }
@@ -167,6 +175,7 @@ namespace swapbot
                 par.Add("rate", newRate);
                 resp = postuj("swapOpen", par);//OPEN SESAME!
             }
+
         }
 
         private void btGOGOGO_Click(object sender, EventArgs e)
@@ -201,6 +210,11 @@ namespace swapbot
                     timer = (int)nudTimer.Value;
                     flag = true; //zablokować ew. kolejne wywyołania
                     ticker();
+                    if (error)
+                    {
+                        tbLog.Text += nl + "Wystąpił bład transmisji!" + nl;
+                        error = false;
+                    }
                     flag = false; //koniec, może zacząć od nowa
                 }
             }
@@ -254,4 +268,3 @@ namespace swapbot
         }
     }
 }
-
