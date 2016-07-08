@@ -81,6 +81,7 @@ namespace swapbot
                 error = true;
             }
             tbLog.Text += nl + metoda + nl + resp;//responsy po kolei do okienka
+            if (resp == ""){ error = true; } //odpowiedź nigdy nie powinna być pusta
             return resp;
         }
 
@@ -119,7 +120,7 @@ namespace swapbot
                 tbLog.Text += nl + "Błąd pobierania danych!" + nl + e.Message.ToString() + nl;
                 error = true;
             }
-            if (error) return; //kończymy jak błąd
+            if (error || jstring == "") return; //kończymy jak błąd
 
             var cut = new { cutoff = "" };
             var json = JsonConvert.DeserializeAnonymousType(jstring, cut);
