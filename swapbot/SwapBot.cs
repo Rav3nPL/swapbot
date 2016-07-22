@@ -77,11 +77,12 @@ namespace swapbot
             }
             catch (Exception e)
             {
+                log(e);
                 tbLog.Text += nl + "Błąd transmisji! " + nl + e.Message.ToString() + nl;
                 error = true;
             }
             tbLog.Text += nl + metoda + nl + resp;//responsy po kolei do okienka
-            if (resp == ""){ error = true; } //odpowiedź nigdy nie powinna być pusta
+            if (resp == "") { error = true; } //odpowiedź nigdy nie powinna być pusta
             return resp;
         }
 
@@ -117,6 +118,7 @@ namespace swapbot
             }
             catch (Exception e)
             {
+                log(e);
                 tbLog.Text += nl + "Błąd pobierania danych!" + nl + e.Message.ToString() + nl;
                 error = true;
             }
@@ -202,30 +204,52 @@ namespace swapbot
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            timer--;
-            lblLicz.Text = timer.ToString();
-            if (flag == false)
+            try //ye olde ultimate bughunter
             {
-                if (timer == 1) //nie odliczam do zera :P
+                timer--;
+                lblLicz.Text = timer.ToString();
+                if (flag == false)
                 {
-                    timer = (int)nudTimer.Value;
-                    flag = true; //zablokować ew. kolejne wywyołania
-                    ticker();
-                    if (error)
+                    if (timer == 1) //nie odliczam do zera :P
                     {
-                        tbLog.Text += nl + "Wystąpił bład transmisji!" + nl;
-                        error = false;
+                        timer = (int)nudTimer.Value;
+                        flag = true; //zablokować ew. kolejne wywyołania
+                        ticker();
+                        if (error)
+                        {
+                            tbLog.Text += nl + "Wystąpił bład transmisji!" + nl;
+                            error = false;
+                        }
+                        flag = false; //koniec, może zacząć od nowa
                     }
-                    flag = false; //koniec, może zacząć od nowa
                 }
-            }
-            else
-            {
-                if (timer < 0)
+                else
                 {
-                    tbLog.Text = "Wygląda na to, że poprzednie wywyołanie się nie skończyło. Trochę za długo, nieprawda-ż?";
+                    if (timer < 0)
+                    {
+                        tbLog.Text = "Wygląda na to, że poprzednie wywyołanie się nie skończyło. Trochę za długo, nieprawda-ż?";
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                log(ex);
+                Application.Restart(); //bez marudzenia od nowa :P
+            }
+        }
+
+        void log(Exception e)
+        {
+            StringBuilder s=new StringBuilder();
+            s.Append(DateTime.Now.ToString());
+            s.Append(nl);
+            s.Append(e.Message.ToString());
+            s.Append(nl);
+            s.Append(e.Source.ToString());
+            s.Append(nl);
+            s.Append(e.StackTrace.ToString());
+            s.Append(nl);
+            File.AppendAllText("log.txt", s.ToString());
         }
 
         private void SwapBot_Load(object sender, EventArgs e)
