@@ -92,6 +92,8 @@ namespace swapbot
                 var json = JsonConvert.DeserializeAnonymousType(resp, ok);
                 if (json.success != "true") 
                 {
+                    Exception e = new Exception(resp);
+                    log(e);
                     error = true;
                 }
             }
