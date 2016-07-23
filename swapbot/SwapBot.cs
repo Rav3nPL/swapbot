@@ -82,7 +82,20 @@ namespace swapbot
                 error = true;
             }
             tbLog.Text += nl + metoda + nl + resp;//responsy po kolei do okienka
-            if (resp == "") { error = true; } //odpowiedź nigdy nie powinna być pusta
+            if (resp == "") //odpowiedź nigdy nie powinna być pusta
+            {
+                error = true;
+            }
+            else //zawsze powinno być success:true
+            {
+                var ok = new { success = "" };
+                var json = JsonConvert.DeserializeAnonymousType(resp, ok);
+                if (json.success != "true") 
+                {
+                    error = true;
+                }
+            }
+
             return resp;
         }
 
