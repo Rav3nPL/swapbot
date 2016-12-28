@@ -163,7 +163,7 @@ namespace swapbot
 
             decimal diff = ileJest - Convert.ToDecimal(rate, cult);
             tbLog.Text += nl + "Obliczona różnica: " + diff + nl;
-            if (diff <= 0 || diff > nudPerc.Value)//jeżeli nie zarabiamy lub różnica jest większa niż %
+            if (diff < 0)//jeżeli nie zarabiamy
             {
                 string stan = "";
                 if (id != "") //jak mam swapa to go zamykam
@@ -192,6 +192,7 @@ namespace swapbot
                 par.Add("amount", stan);
                 par.Add("rate", newRate);
                 resp = postuj("swapOpen", par);//OPEN SESAME!
+                ticker();//sprawdź po ustawieniu czy jest ok.
             }
 
         }
@@ -260,10 +261,16 @@ namespace swapbot
             s.Append(nl);
             s.Append(e.Message.ToString());
             s.Append(nl);
-            s.Append(e.Source.ToString());
-            s.Append(nl);
-            s.Append(e.StackTrace.ToString());
-            s.Append(nl);
+            if (e.Source != null)
+            {
+                s.Append(e.Source.ToString());
+                s.Append(nl);
+            }
+            if (e.StackTrace != null)
+            {
+                s.Append(e.StackTrace.ToString());
+                s.Append(nl);
+            }
             File.AppendAllText("log.txt", s.ToString());
         }
 
@@ -305,6 +312,23 @@ namespace swapbot
                 sw.Close();
             }
             tbLog.Text = "Konfiguracja zapisana w pliku konf.txt";
+        }
+
+        private void SwapBot_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)//przy minimalizacji
+            {
+                this.ShowInTaskbar = false;
+                notifyIcon1.Visible = true;
+                notifyIcon1.ShowBalloonTip(1500);
+            }
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            this.ShowInTaskbar = true;
+            notifyIcon1.Visible = false;
+            this.WindowState = FormWindowState.Normal;
         }
     }
 }

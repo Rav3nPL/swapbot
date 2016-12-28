@@ -50,6 +50,8 @@
             this.rbProc = new System.Windows.Forms.RadioButton();
             this.rbArb = new System.Windows.Forms.RadioButton();
             this.cbAuto = new System.Windows.Forms.CheckBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIcon2 = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudPerc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimer)).BeginInit();
             this.SuspendLayout();
@@ -140,7 +142,7 @@
             this.nudPerc.Size = new System.Drawing.Size(60, 20);
             this.nudPerc.TabIndex = 7;
             this.nudPerc.Value = new decimal(new int[] {
-            5,
+            15,
             0,
             0,
             65536});
@@ -167,7 +169,7 @@
             this.nudTimer.Size = new System.Drawing.Size(60, 20);
             this.nudTimer.TabIndex = 10;
             this.nudTimer.Value = new decimal(new int[] {
-            90,
+            25,
             0,
             0,
             0});
@@ -277,6 +279,19 @@
             this.cbAuto.Text = "autostart";
             this.cbAuto.UseVisualStyleBackColor = true;
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.BalloonTipText = "Swapbot schował się tutaj!";
+            this.notifyIcon1.BalloonTipTitle = "SwapBot";
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "SwapBot";
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
+            // notifyIcon2
+            // 
+            this.notifyIcon2.Text = "notifyIcon2";
+            this.notifyIcon2.Visible = true;
+            // 
             // SwapBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,6 +320,7 @@
             this.Name = "SwapBot";
             this.Text = "Bitmarket SwapBot by rav3n_pl";
             this.Load += new System.EventHandler(this.SwapBot_Load);
+            this.Resize += new System.EventHandler(this.SwapBot_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.nudPerc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimer)).EndInit();
             this.ResumeLayout(false);
@@ -334,6 +350,8 @@
         private System.Windows.Forms.RadioButton rbProc;
         private System.Windows.Forms.RadioButton rbArb;
         private System.Windows.Forms.CheckBox cbAuto;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.NotifyIcon notifyIcon2;
     }
 }
 
