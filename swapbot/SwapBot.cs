@@ -163,7 +163,7 @@ namespace swapbot
 
             decimal diff = ileJest - Convert.ToDecimal(rate, cult);
             tbLog.Text += nl + "Obliczona różnica: " + diff + nl;
-            if (diff < 0)//jeżeli nie zarabiamy
+            if (diff <= 0 || diff==ileJest) //jeżeli nie zarabiamy albo nic nie mamy ustawione
             {
                 string stan = "";
                 if (id != "") //jak mam swapa to go zamykam
