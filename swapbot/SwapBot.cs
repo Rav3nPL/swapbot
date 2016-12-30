@@ -141,9 +141,9 @@ namespace swapbot
 
             var cut = new { cutoff = "" };
             var json = JsonConvert.DeserializeAnonymousType(jstring, cut);
-            decimal ileJest = Convert.ToDecimal(json.cutoff, cult);
-            tbLog.Text += nl + "Obecny cutoff: " + ileJest + nl;
-            decimal ustaw = rbProc.Checked ? ileJest * ((100 - nudPerc.Value) / 100) : ileJest - nudPerc.Value; //teraz to jest "ile ma być"
+            decimal currCutoff = Convert.ToDecimal(json.cutoff, cult);
+            tbLog.Text += nl + "Obecny cutoff: " + currCutoff + nl;
+            decimal ustaw = rbProc.Checked ? currCutoff * ((100 - nudPerc.Value) / 100) : currCutoff - nudPerc.Value; //teraz to jest "ile ma być"
             ustaw = Math.Truncate(ustaw * 1000) / 1000;//zaokrąglam do 3 miejsc.
             string newRate = ustaw.ToString(cult);
 
@@ -161,9 +161,11 @@ namespace swapbot
                 rate = jresp.data[0].rate;
             }
 
-            decimal diff = ileJest - Convert.ToDecimal(rate, cult);
+            decimal diff = currCutoff - Convert.ToDecimal(rate, cult);
+            //potrzebujemy dopuszcalnej odchyłki "w górę" zanim przestawimy swapa - 105% ustawianej różnicy wydaje mi się sensowne
+            decimal maxDiff = (decimal)((double)(rbProc.Checked ? currCutoff - currCutoff * ((100 - nudPerc.Value) / 100) : nudPerc.Value) * 1.05);
             tbLog.Text += nl + "Obliczona różnica: " + diff + nl;
-            if (diff <= 0 || diff==ileJest) //jeżeli nie zarabiamy albo nic nie mamy ustawione
+            if (diff <= 0 || currCutoff > ustaw + maxDiff) //jeżeli jesteśmy za wysoko, lub kurs wzrósł
             {
                 string stan = "";
                 if (id != "") //jak mam swapa to go zamykam
@@ -185,16 +187,19 @@ namespace swapbot
                     jresp = JsonConvert.DeserializeObject(resp);
                     stan = jresp.data.balances.available.BTC;
                 }
-
-                //swapOpen currency amount rate -> id balances
-                par.Clear();
-                par.Add("currency", "BTC");
-                par.Add("amount", stan);
-                par.Add("rate", newRate);
-                resp = postuj("swapOpen", par);//OPEN SESAME!
-                ticker();//sprawdź po ustawieniu czy jest ok.
+                if (Convert.ToDouble(stan, cult) > 0.1) //jezeli mamy powyżej 0.1BTC wolnego
+                {
+                    //swapOpen currency amount rate -> id balances
+                    par.Clear();
+                    par.Add("currency", "BTC");
+                    par.Add("amount", stan);
+                    par.Add("rate", newRate);
+                    resp = postuj("swapOpen", par);//OPEN SESAME!
+                    Application.DoEvents();//haxx żeby log mógł się odświerzyć
+                    ticker();//sprawdź po ustawieniu czy jest ok, ew od razu popraw.
+                }
+                
             }
-
         }
 
         private void btGOGOGO_Click(object sender, EventArgs e)
