@@ -122,6 +122,7 @@ namespace swapbot
         {
             error = false;
             tbLog.Text = "";//czyścimy loga
+            Application.DoEvents();
             string jstring = "";
             CultureInfo cult = new CultureInfo("en-US");
             try
@@ -144,7 +145,7 @@ namespace swapbot
             decimal currCutoff = Convert.ToDecimal(json.cutoff, cult);
             tbLog.Text += nl + "Obecny cutoff: " + currCutoff + nl;
             decimal ustaw = rbProc.Checked ? currCutoff * ((100 - nudPerc.Value) / 100) : currCutoff - nudPerc.Value; //teraz to jest "ile ma być"
-            ustaw = Math.Truncate(ustaw * 1000) / 1000;//zaokrąglam do 3 miejsc.
+            ustaw = Math.Truncate(ustaw * 10000) / 10000;//zaokrąglam do 4 miejsc.
             string newRate = ustaw.ToString(cult);
 
             //swaplist currency  BTC ->id
@@ -165,7 +166,7 @@ namespace swapbot
             //potrzebujemy dopuszcalnej odchyłki "w górę" zanim przestawimy swapa - 105% ustawianej różnicy wydaje mi się sensowne
             decimal maxDiff = (decimal)((double)(rbProc.Checked ? currCutoff - currCutoff * ((100 - nudPerc.Value) / 100) : nudPerc.Value) * 1.05);
             tbLog.Text += nl + "Obliczona różnica: " + diff + nl;
-            if (diff <= 0 || currCutoff > ustaw + maxDiff) //jeżeli jesteśmy za wysoko, lub kurs wzrósł
+            if (diff <= 0 || currCutoff > ustaw + maxDiff || currCutoff == diff)//jeżeli jesteśmy za wysoko, lub kurs wzrósł, lub nic nie mamy
             {
                 string stan = "";
                 if (id != "") //jak mam swapa to go zamykam
