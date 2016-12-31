@@ -166,7 +166,7 @@ namespace swapbot
             //potrzebujemy dopuszcalnej odchyłki "w górę" zanim przestawimy swapa - 105% ustawianej różnicy wydaje mi się sensowne
             decimal maxDiff = (decimal)((double)(rbProc.Checked ? currCutoff - currCutoff * ((100 - nudPerc.Value) / 100) : nudPerc.Value) * 1.05);
             tbLog.Text += nl + "Obliczona różnica: " + diff + nl;
-            if (diff <= 0 || currCutoff > ustaw + maxDiff || currCutoff == diff)//jeżeli jesteśmy za wysoko, lub kurs wzrósł, lub nic nie mamy
+            if (diff <= 0 || diff >= currCutoff - ustaw + maxDiff || currCutoff == diff)//jeżeli jesteśmy za wysoko, lub kurs wzrósł, lub nic nie mamy
             {
                 string stan = "";
                 if (id != "") //jak mam swapa to go zamykam
