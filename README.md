@@ -23,4 +23,8 @@ Po odpaleniu program będzie okresowo sprawdzał akatualny stan i w razie potrze
 
 Bot "zakłada" że masz jakieś środki na koncie oraz masz max 1 kontrakt swap.
 
+Do działania potrzebny jest plik "swapbot.exe" oraz bibioteka "Newtonsoft.Json.dll" - oba zawarte w katalogu "bin/Release". Bilbioteka musi być w tym samym katalogu co plik exe. Zapis konfiguracji tworzy plik "konfig.txt". Są to jedyne pliki używane przez program.
+
+Dyskusja na forum: https://forum.bitcoin.pl/viewtopic.php?f=54&t=20230
+
 Działa? Zarobiłeś więcej niż wcześniej? Tipbox: 1Rav3nkMayCijuhzcYemMiPYsvcaiwHni ;]
